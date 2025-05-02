@@ -2,7 +2,7 @@ package com.dev.attendance.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dev.attendance.Repository.Team;
+import com.dev.attendance.domain.Team;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
