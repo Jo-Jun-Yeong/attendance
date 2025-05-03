@@ -32,8 +32,8 @@ public class EmpController {
     }
 
     //사원입력
-    @PostMapping("/api/emp/registEmp")
-    public ResponseEntity<Emp> redgEmp(@RequestBody EmpCreateRequest request) {
+    @PostMapping("/api/emp/regist")
+    public ResponseEntity<Emp> registEmp(@RequestBody EmpCreateRequest request) {
         System.out.println("Before");
         Emp redgEmp = empService.redgEmp(request);
         System.out.println("After");
@@ -43,7 +43,7 @@ public class EmpController {
     }
     
     //사원 전체 검색
-    @GetMapping("/api/emp/getAllEmp")
+    @GetMapping("/api/emp/getAll")
     public ResponseEntity<List<Emp>> getAllEmp(){
         
         List<Emp> empList = empService.getAllEmp();

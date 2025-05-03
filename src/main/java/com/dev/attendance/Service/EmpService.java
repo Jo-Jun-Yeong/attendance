@@ -27,6 +27,7 @@ public class EmpService {
     }
 
     //사원 입력
+    @Transactional
     public Emp redgEmp(EmpCreateRequest request){
 
         Emp emp = new Emp(
@@ -48,12 +49,13 @@ public class EmpService {
     }
 
     //사원 전체검색
+    @Transactional
     public List<Emp> getAllEmp(){
         List<Emp> resultList = empRepository.findAll();
 
         return resultList;
     }
-
+    @Transactional
     public void deleteEmp(Long id){
 
         Emp deletedemp = null;
