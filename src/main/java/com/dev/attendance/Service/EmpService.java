@@ -35,26 +35,51 @@ public class EmpService {
             request.getRole(),
             request.getBirthday()
         );
+        System.out.println("데이터 입력 '시작'.");
+        System.out.printf("%s / %s / %s / %s / ",
+                            request.getName(),
+                            request.getTeamName() !=null ? request.getTeamName() : "없음",
+                            request.getRole(),
+                            request.getBirthday().toString());
 
         Emp redgEmp = empRepository.saveAndFlush(emp);
-
+        System.out.println("데이터 입력 '종료'.");
         return redgEmp;
     }
 
     //사원 전체검색
     public List<Emp> getAllEmp(){
         List<Emp> resultList = empRepository.findAll();
-        // --- ★★★ 이 부분들을 추가하여 실제 반환값을 확인합니다 ★★★ ---
-        System.out.println("--- Debugging getAllEmp ---");
-        System.out.println("Repository에서 가져온 raw 결과: " + resultList); // List 객체 자체 출력
-        System.out.println("결과 리스트의 타입: " + resultList.getClass().getName()); // 리스트 타입 확인
-        System.out.println("결과 리스트의 크기: " + resultList.size()); // 리스트 크기 확인
-        if (!resultList.isEmpty()) {
-            System.out.println("결과 리스트의 첫 번째 요소 타입: " + resultList.get(0).getClass().getName()); // 첫 요소 타입 확인
-            System.out.println("결과 리스트의 첫 번째 요소: " + resultList.get(0)); // 첫 요소 객체 출력
-        }
-        System.out.println("--- End Debugging ---");
-        // -------------------------------------------------------
+
         return resultList;
+    }
+
+    public void deleteEmp(Long id){
+
+        Emp deletedemp = null;
+        
+        try {
+            deletedemp = empRepository.findById(id).get();
+            
+            System.out.printf("%s의 아래의 정보가 삭제됩니다.\n 이름: %s \n 팀: %s \n 직급: %s \n 생일: %s \n 입사일: %s" 
+            ,deletedemp.getName()
+            ,deletedemp.getName()
+            ,deletedemp.getTeamName() != null ? deletedemp.getTeamName() : "없음"
+            ,deletedemp.getRole() != null ? deletedemp.getRole() : "없음"
+            ,deletedemp.getBirthday()
+            ,deletedemp.getWorkStartDate());
+
+            empRepository.deleteById(id);
+
+            System.out.println(id+"번 직원 삭제 완료");
+        } catch (IllegalArgumentException e) {
+            System.err.println("오류: 해당 ID의 직원을 찾을 수 없습니다: " + id);
+        } catch (Exception e){
+            System.err.println("오류: 직원 삭제 중 알 수 없는 오류 발생. ID: " + id);
+            System.err.println("오류: " + e.getMessage());
+            throw new RuntimeException("직원 삭제중 오류가 발생했습니다.", e);
+        }
+
+        
     }
 }

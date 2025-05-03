@@ -11,7 +11,9 @@ import com.dev.attendance.Repository.EmpRepository;
 import com.dev.attendance.Service.EmpService;
 import com.dev.attendance.domain.Emp;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +43,7 @@ public class EmpController {
     }
     
     //사원 전체 검색
-    @GetMapping("/api/emp/GetAllEmp")
+    @GetMapping("/api/emp/getAllEmp")
     public ResponseEntity<List<Emp>> getAllEmp(){
         
         List<Emp> empList = empService.getAllEmp();
@@ -49,4 +51,10 @@ public class EmpController {
         return ResponseEntity.status(HttpStatus.FOUND).body(empList);
     }
 
+    @DeleteMapping("/api/emp/delete/{id}")
+    public ResponseEntity<Void> deleteEmp(@PathVariable Long id){
+        empService.deleteEmp(id);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
