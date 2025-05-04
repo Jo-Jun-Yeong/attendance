@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -37,6 +39,15 @@ public class TeamController {
         Team redgTeam = teamService.redgTeam(request);
         
         return ResponseEntity.status(HttpStatus.OK).body(redgTeam);
+    }
+    
+
+    @GetMapping("/api/team/getTeam")
+    public ResponseEntity<Team> getTeam(@RequestParam Long id) {
+
+        Team team = teamService.findTeam(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(team);
     }
     
 

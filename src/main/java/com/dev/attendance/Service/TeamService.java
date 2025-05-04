@@ -35,6 +35,20 @@ public class TeamService {
 
         return team;
     }
+
+
+    @Transactional
+    public Team findTeam(Long id){
+        
+        System.out.println("팀을 검색합니다.");
+
+        Team team = teamRepository.findById(id).orElseThrow( () -> new RuntimeException("해당하는 팀이 없습니다."));
+        
+
+
+        return team;
+    }
+
     @Transactional
     public List<Team> getAllTeam() {
         System.out.println("모든 Team을 불러옵니다.");
@@ -56,5 +70,6 @@ public class TeamService {
         }
 
     }
+
 
 }

@@ -48,6 +48,16 @@ public class EmpService {
         return redgEmp;
     }
 
+    //사원 검색
+    @Transactional
+    public Emp getEmp(Long id){
+        System.out.println("사원을 찾습니다.");
+        Emp emp = empRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id: "+ id + "의 사원이 없습니다"));
+        System.out.println("사원 찾기 종료");
+        
+        return emp;
+    }
+
     //사원 전체검색
     @Transactional
     public List<Emp> getAllEmp(){

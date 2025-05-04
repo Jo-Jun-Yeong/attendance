@@ -2,6 +2,7 @@ package com.dev.attendance.Controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class EmpController {
@@ -42,6 +45,15 @@ public class EmpController {
         
     }
     
+    @GetMapping("/api/emp/getEmp")
+    public ResponseEntity<Emp> getEmp(@RequestParam Long id) {
+
+        Emp emp = empService.getEmp(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(emp);
+    }
+    
+
     //사원 전체 검색
     @GetMapping("/api/emp/getAll")
     public ResponseEntity<List<Emp>> getAllEmp(){
