@@ -1,8 +1,7 @@
 package com.dev.attendance.DTO.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.Getter;
 
@@ -11,7 +10,7 @@ public class EmpCreateRequest {
     private String name;
     private String teamName; 
     private String role;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     
 }
 

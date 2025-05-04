@@ -1,10 +1,7 @@
 package com.dev.attendance.DTO;
 
-import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
+import java.time.LocalDate;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class EmpDTO{
@@ -12,15 +9,15 @@ public class EmpDTO{
     private String name; 
     private String teamName;
     private String role; 
-    private LocalDateTime birthday;
-    private LocalDateTime workStartDate;
+    private LocalDate birthday;
+    private LocalDate workStartDate;
 
     public EmpDTO(Long id, 
         String name, String 
         teamName, 
         String role, 
-        LocalDateTime birthday, 
-        LocalDateTime workStartDate){
+        LocalDate birthday, 
+        LocalDate workStartDate){
 
             this.id=id;
             this.name=name;

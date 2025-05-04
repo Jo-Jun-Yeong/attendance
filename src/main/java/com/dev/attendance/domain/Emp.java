@@ -1,9 +1,6 @@
 package com.dev.attendance.domain;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.springframework.cglib.core.Local;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,12 +28,12 @@ public class Emp {
     private String role;        //varchar(25) not null
 
     @Column(nullable=true)
-    private LocalDateTime birthday;     //datetime null
+    private LocalDate birthday;     //datetime null
 
     @Column(nullable = false)
-    private LocalDateTime workStartDate; //not null/
+    private LocalDate workStartDate; //not null/
 
-    public Emp(String name, String teamName, String role,LocalDateTime birthday){
+    public Emp(String name, String teamName, String role,LocalDate birthday){
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(String.format("잘못된 형식의 이름입니다: %s", name));
         }
@@ -49,7 +46,7 @@ public class Emp {
     @PrePersist
     public void prePersist() {
         if (this.workStartDate == null) {
-            this.workStartDate = LocalDateTime.now();
+            this.workStartDate = LocalDate.now();
         }
     }
     public Emp() {
