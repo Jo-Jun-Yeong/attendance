@@ -54,7 +54,7 @@ public class EmpService {
         System.out.println("사원을 찾습니다.");
         Emp emp = empRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id: "+ id + "의 사원이 없습니다"));
         System.out.println("사원 찾기 종료");
-        
+
         return emp;
     }
 
@@ -91,7 +91,22 @@ public class EmpService {
             System.err.println("오류: " + e.getMessage());
             throw new RuntimeException("직원 삭제중 오류가 발생했습니다.", e);
         }
-
-        
     }
+
+    //직원 존재 유무 판단
+    public boolean isEmp(Long id){
+
+        boolean flag = empRepository.existsById(id);
+        
+            if(flag){
+                System.out.println("직원이 검색되었습니다.");
+                return flag;
+            }
+            else {
+                System.out.println("해당 직원을 찾을 수 없습니다.");
+                return flag;
+
+            }
+    }
+
 }

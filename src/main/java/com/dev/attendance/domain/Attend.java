@@ -1,0 +1,31 @@
+package com.dev.attendance.domain;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
+
+@Data
+@Entity
+public class Attend {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    @Column(nullable = false)
+    private Long employeeId;
+    @Column(nullable = true)
+    private LocalDateTime goToWork;
+    @Column(nullable = true)
+    private LocalDateTime offWork;
+
+    public Attend(Long id){
+        this.id = id;
+    }
+
+    public Attend(){}
+}

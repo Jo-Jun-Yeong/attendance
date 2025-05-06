@@ -1,5 +1,6 @@
 package com.dev.attendance.DTO.response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,8 +17,8 @@ public class EmpResponse {
     private String name;
     private String teamName;    //varchar(25)null
     private String role;        //varchar(25) not null
-    private LocalDateTime birthday;     //datetime null
-    private LocalDateTime workStartDate; //not null/
+    private LocalDate birthday;     //datetime null
+    private LocalDate workStartDate; //not null/
 
     public EmpResponse(){
 
@@ -37,6 +38,6 @@ public class EmpResponse {
         this.name=name;
     }
 
-
+    
     
 }
