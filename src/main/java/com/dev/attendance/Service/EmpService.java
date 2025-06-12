@@ -12,9 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.attendance.DTO.EmpDTO;
 import com.dev.attendance.DTO.request.EmpCreateRequest;
+import com.dev.attendance.DTO.request.EmpUpdateRequest;
 import com.dev.attendance.Repository.EmpRepository;
 // import com.dev.attendance.Repository.emp.EmpRepository;
 import com.dev.attendance.domain.Emp;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -52,7 +55,7 @@ public class EmpService {
     @Transactional
     public Emp getEmp(Long id){
         System.out.println("사원을 찾습니다.");
-        Emp emp = empRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 id: "+ id + "의 사원이 없습니다"));
+        Emp emp = empRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id: "+ id + "의 사원이 없습니다"));
         System.out.println("사원 찾기 종료");
 
         return emp;
@@ -69,9 +72,10 @@ public class EmpService {
     public void deleteEmp(Long id){
 
         Emp deletedemp = null;
+
+        deletedemp = empRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id: "+ id + "의 사원이 없습니다"));
         
         try {
-            deletedemp = empRepository.findById(id).get();
             
             System.out.printf("%s의 아래의 정보가 삭제됩니다.\n 이름: %s \n 팀: %s \n 직급: %s \n 생일: %s \n 입사일: %s" 
             ,deletedemp.getName()
@@ -84,7 +88,7 @@ public class EmpService {
             empRepository.deleteById(id);
 
             System.out.println(id+"번 직원 삭제 완료");
-        } catch (IllegalArgumentException e) {
+        } catch (EntityNotFoundException e) {
             System.err.println("오류: 해당 ID의 직원을 찾을 수 없습니다: " + id);
         } catch (Exception e){
             System.err.println("오류: 직원 삭제 중 알 수 없는 오류 발생. ID: " + id);
@@ -93,11 +97,21 @@ public class EmpService {
         }
     }
 
+    public Emp updateEmp(Long id, EmpUpdateRequest request){
+        Emp findEmp = this.getEmp(id);
+
+        findEmp.setName(request.getName());
+        findEmp.setRole(request.getRole());
+        findEmp.setTeamName(request.getTeamName());
+
+        return empRepository.save(findEmp);
+    }
+
     //직원 존재 유무 판단
     public boolean isEmp(Long id){
 
         boolean flag = empRepository.existsById(id);
-        
+
             if(flag){
                 System.out.println("직원이 검색되었습니다.");
                 return flag;

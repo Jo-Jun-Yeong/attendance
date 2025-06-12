@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.attendance.DTO.request.TeamCreateRequest;
+import com.dev.attendance.DTO.request.TeamUpdateRequest;
 import com.dev.attendance.Repository.TeamRepository;
 import com.dev.attendance.domain.Team;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class TeamService {
@@ -71,5 +74,12 @@ public class TeamService {
 
     }
 
+    @Transactional
+    public Team updateTeam(Long id, TeamUpdateRequest request){
+        Team findTeam = teamRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("해당하는팀("+id+")이 없습니다."));
 
+        findTeam.setManager(request.getManager());
+
+        return teamRepository.save(findTeam);
+    }
 }

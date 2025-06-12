@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.dev.attendance.DTO.request.EmpCreateRequest;
+import com.dev.attendance.DTO.request.EmpUpdateRequest;
 import com.dev.attendance.Repository.EmpRepository;
 import com.dev.attendance.Service.EmpService;
 import com.dev.attendance.domain.Emp;
@@ -19,6 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 
 @RestController
@@ -45,6 +51,7 @@ public class EmpController {
         
     }
     
+    //사원 1명 정보 가져오기
     @GetMapping("/api/emp/getEmp")
     public ResponseEntity<Emp> getEmp(@RequestParam Long id) {
 
@@ -63,10 +70,21 @@ public class EmpController {
         return ResponseEntity.status(HttpStatus.FOUND).body(empList);
     }
 
+    
+    //사원 정보 업데이트
+    @PutMapping("api/emp/update/{id}")
+    public ResponseEntity<Emp> updateEmp(@PathVariable Long id, @RequestBody EmpUpdateRequest request) {
+        Emp updatedEmp = empService.updateEmp(id, request);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(updatedEmp);
+    }
+    
+    //사원 삭제
     @DeleteMapping("/api/emp/delete/{id}")
     public ResponseEntity<Void> deleteEmp(@PathVariable Long id){
         empService.deleteEmp(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    
 }
