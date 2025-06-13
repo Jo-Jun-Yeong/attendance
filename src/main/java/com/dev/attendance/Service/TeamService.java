@@ -32,7 +32,7 @@ public class TeamService {
             request.getManager()
         );
 
-        System.out.printf("팀 이블: %s \n 매니저: %s \n",request.getTeamName(), request.getManager());
+        System.out.printf("팀 이름: %s \n 매니저: %s \n",request.getTeamName(), request.getManager());
         teamRepository.save(team);
         System.out.println("Team 등록을 종료합니다.");
 
@@ -46,8 +46,6 @@ public class TeamService {
         System.out.println("팀을 검색합니다.");
 
         Team team = teamRepository.findById(id).orElseThrow( () -> new RuntimeException("해당하는 팀이 없습니다."));
-        
-
 
         return team;
     }
@@ -82,4 +80,25 @@ public class TeamService {
 
         return teamRepository.save(findTeam);
     }
+
+    @Transactional
+    public int getTeamMemberCount(String teamName){
+        return  teamRepository.getMemberCountByTeamName(teamName);
+    }
+
+    @Transactional
+    public void updateTeamMemberCount(String teamName, int teamMemberCount){
+
+
+        if(!teamName.equals(null)){
+            Team team = teamRepository.findByTeamName(teamName);
+        
+            team.setMemberCount(teamMemberCount);
+            
+            teamRepository.saveAndFlush(team);
+        }
+        System.out.println("updateTeamMemberCount 종료");
+
+    }
+    
 }

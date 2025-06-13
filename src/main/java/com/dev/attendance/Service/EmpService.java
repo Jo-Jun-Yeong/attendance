@@ -14,7 +14,7 @@ import com.dev.attendance.DTO.EmpDTO;
 import com.dev.attendance.DTO.request.EmpCreateRequest;
 import com.dev.attendance.DTO.request.EmpUpdateRequest;
 import com.dev.attendance.Repository.EmpRepository;
-// import com.dev.attendance.Repository.emp.EmpRepository;
+import com.dev.attendance.Repository.TeamRepository;
 import com.dev.attendance.domain.Emp;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,11 +22,14 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 @Transactional
 public class EmpService {
+
+    private final TeamService teamService;
     private final EmpRepository empRepository;
 
     @Autowired
-    public EmpService (EmpRepository empRepository){
+    public EmpService (EmpRepository empRepository, TeamService teamService){
         this.empRepository=empRepository;
+        this.teamService = teamService;
     }
 
     //사원 입력
@@ -47,6 +50,11 @@ public class EmpService {
                             request.getBirthday().toString());
 
         Emp redgEmp = empRepository.saveAndFlush(emp);
+
+        if(!request.getTeamName().equals(null)){
+            this.updateTeamCount(redgEmp.getTeamName());
+        }
+        
         System.out.println("데이터 입력 '종료'.");
         return redgEmp;
     }
@@ -72,8 +80,10 @@ public class EmpService {
     public void deleteEmp(Long id){
 
         Emp deletedemp = null;
+        String teamName = "";
 
         deletedemp = empRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 id: "+ id + "의 사원이 없습니다"));
+        teamName = deletedemp.getTeamName();
         
         try {
             
@@ -85,9 +95,10 @@ public class EmpService {
             ,deletedemp.getBirthday()
             ,deletedemp.getWorkStartDate());
 
-            empRepository.deleteById(id);
-
+            empRepository.deleteById(id);  
             System.out.println(id+"번 직원 삭제 완료");
+
+
         } catch (EntityNotFoundException e) {
             System.err.println("오류: 해당 ID의 직원을 찾을 수 없습니다: " + id);
         } catch (Exception e){
@@ -95,14 +106,35 @@ public class EmpService {
             System.err.println("오류: " + e.getMessage());
             throw new RuntimeException("직원 삭제중 오류가 발생했습니다.", e);
         }
+
+        //팀 인원수 조정 
+        this.updateTeamCount(teamName);
     }
 
     public Emp updateEmp(Long id, EmpUpdateRequest request){
         Emp findEmp = this.getEmp(id);
+        String beforeTeamName = findEmp.getTeamName() == null ? findEmp.getTeamName(): null ;
+        String afterTeamName = request.getTeamName() == null ? request.getTeamName() : null ;
 
-        findEmp.setName(request.getName());
-        findEmp.setRole(request.getRole());
-        findEmp.setTeamName(request.getTeamName());
+        if(!request.getName().isEmpty()){
+            System.out.printf("\s 사원의 이름을 \s로 변경하였습니다.",findEmp.getName(), request.getName());
+            findEmp.setName(request.getName());
+        }
+
+        if(!request.getRole().isBlank()){
+            System.out.printf("\s 사원의 직위를 \s -> \s로 변경하였습니다.",findEmp.getName(),findEmp.getRole(), request.getRole());
+            findEmp.setRole(request.getRole());
+        }
+
+        if(!request.getTeamName().isBlank()){
+            System.out.printf("\s 사원의 직위를 \s -> \s로 변경하였습니다.",findEmp.getName(),findEmp.getTeamName(), request.getTeamName());
+            findEmp.setTeamName(request.getTeamName());
+
+            //team이 변경될 때 team인원수 조정
+            this.updateTeamCount(beforeTeamName);
+            this.updateTeamCount(afterTeamName);
+            
+        }
 
         return empRepository.save(findEmp);
     }
@@ -123,4 +155,11 @@ public class EmpService {
             }
     }
 
+    public void updateTeamCount(String teamName){
+
+        System.out.printf("팀 \" \s \"의 인원 조정 시작\n",teamName);
+        int count = teamService.getTeamMemberCount(teamName);
+        teamService.updateTeamMemberCount(teamName, count);
+        System.out.println("팀 인원수 조정 끝");
+    }
 }
