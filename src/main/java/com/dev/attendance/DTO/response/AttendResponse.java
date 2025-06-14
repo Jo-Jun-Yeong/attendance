@@ -2,8 +2,8 @@ package com.dev.attendance.DTO.response;
 
 import java.time.LocalDateTime;
 
+
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class AttendResponse {

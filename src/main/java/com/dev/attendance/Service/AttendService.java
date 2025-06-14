@@ -3,6 +3,9 @@ import com.dev.attendance.Repository.TeamRepository;
 import com.dev.attendance.domain.Attend;
 import com.dev.attendance.domain.Emp;
 
+
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.dao.DataAccessException;
@@ -32,8 +35,8 @@ public class AttendService {
 
 
     @Transactional
-    public Attend attendance(Long id){
-        System.out.println("start attendance Service.");
+    public Attend goToWork(Long id){
+        System.out.println("start goToWork Service.");
         
         Emp attendemp = empRepository.findById(id).orElseThrow(()-> new RuntimeException("해당 직원은 없습니다."));
 
@@ -56,16 +59,35 @@ public class AttendService {
         }
 
         
-        System.out.println("end attendance Service.");
+        System.out.println("end goToWork Service.");
         return saveAttend;
 
     }
 
     @Transactional
+    public Attend offWork(Long id){
+        System.out.println("start offWork Service.");
+
+        Emp attendemp = empRepository.findById(id).orElseThrow(()-> new RuntimeException("해당 직원은 없습니다."));
+
+        Attend offWork = attendRepository.addOffWorkById(attendemp.getId()).orElseThrow(()-> new RuntimeException("출근하지 않습니다."));
+
+        offWork.setOffWork(getYMDHD());
+
+        attendRepository.save(offWork);
+        
+        System.out.println("end offWork Service.");
+        return offWork;
+    }
+
+    @Transactional
     public LocalDateTime getYMDHD(){
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime result = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute());
+        LocalDateTime result = LocalDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), now.getHour(), now.getMinute());;
 
+    
+
+        
         return result;
     }
 }

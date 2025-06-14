@@ -1,5 +1,6 @@
 package com.dev.attendance.domain;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -16,11 +17,11 @@ public class Attend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="employee_id")
     private Long employeeId;
-    @Column(nullable = true)
+    @Column(nullable = false, name = "go_to_work")
     private LocalDateTime goToWork;
-    @Column(nullable = true)
+    @Column(nullable = true, name= "off_work")
     private LocalDateTime offWork;
 
     public Attend(Long id){

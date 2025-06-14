@@ -23,23 +23,31 @@ public class AttendanceController {
         this.attendService = attendService;
     }
 
-    @PostMapping("/api/attendance/attend")
-    public ResponseEntity<AttendResponse> postMethodName(@RequestBody AttendRequest request) {
+    //출근
+    @PostMapping("/api/attendance/goToWork")
+    public ResponseEntity<AttendResponse> goToWork(@RequestBody AttendRequest request) {
         System.out.println("start attendance Controller");
-        String type = request.getType();
-        if(type.equals("출근")){
-            Attend attend = attendService.attendance(request.getEmployeeId());
-            AttendResponse response = new AttendResponse(attend.getEmployeeId(), attend.getGoToWork(), attend.getOffWork());
+        
+        Attend attend = attendService.goToWork(request.getEmployeeId());
+        AttendResponse response = new AttendResponse(attend.getEmployeeId(), attend.getGoToWork(), attend.getOffWork());
             
-            System.out.println("end  출근 attendance Controller : ");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }else if (type.equals("퇴근")){
-            //퇴근 로직
-            AttendResponse response = null;
-            System.out.println("end  퇴근 attendance Controller : ");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }
-        return null;
+        System.out.println("end  출근 attendance Controller : ");
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    //퇴근
+    @PostMapping("/api/attendance/offTheWork")
+    public ResponseEntity<AttendResponse> offTheWork(@RequestBody AttendRequest request) {
+        System.out.println("start attendance Controller");
+        
+        Attend attend = attendService.offWork(request.getEmployeeId());
+
+        //퇴근 로직
+        AttendResponse response = new AttendResponse(attend.getEmployeeId(), attend.getGoToWork(), attend.getOffWork());
+
+        System.out.println("end  퇴근 attendance Controller : ");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
 }
