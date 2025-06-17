@@ -1,20 +1,31 @@
 package com.dev.attendance.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.dev.attendance.DTO.request.AttendRequest;
+import com.dev.attendance.DTO.request.WorkTimeRequest;
 import com.dev.attendance.DTO.response.AttendResponse;
+import com.dev.attendance.DTO.response.WorkTimeResponse;
 import com.dev.attendance.Service.AttendService;
 import com.dev.attendance.domain.Attend;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
+@RequestMapping("/api/attendance")
 public class AttendanceController {
     
 
@@ -24,7 +35,7 @@ public class AttendanceController {
     }
 
     //출근
-    @PostMapping("/api/attendance/goToWork")
+    @PostMapping("/goToWork")
     public ResponseEntity<AttendResponse> goToWork(@RequestBody AttendRequest request) {
         System.out.println("start attendance Controller");
         
@@ -37,7 +48,7 @@ public class AttendanceController {
     }
 
     //퇴근
-    @PostMapping("/api/attendance/offTheWork")
+    @PostMapping("/offTheWork")
     public ResponseEntity<AttendResponse> offTheWork(@RequestBody AttendRequest request) {
         System.out.println("start attendance Controller");
         
@@ -48,6 +59,19 @@ public class AttendanceController {
 
         System.out.println("end  퇴근 attendance Controller : ");
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
+    @GetMapping("/workMinute")
+    public ResponseEntity<WorkTimeResponse> getWorkTimeMonthlyMinute(@RequestParam Long employee_id, @RequestParam int month) {
+        System.out.println("getWorkTimeMonthlyMinute 시작");
+        // LocalDateTime getmonth = LocalDateTime.of(LocalDate.now().getYear(), month, 1, 0, 0);
+        // System.out.println(getmonth+"***********************************");
+        WorkTimeRequest workTimeRequest = new WorkTimeRequest(employee_id, month);
+
+        WorkTimeResponse workTimeResponse = attendService.getAllWorkTime(workTimeRequest);
+        System.out.println("getWorkTimeMonthlyMinute 끝");
+        return ResponseEntity.status(HttpStatus.FOUND).body(workTimeResponse);
     }
     
 }
