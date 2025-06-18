@@ -112,17 +112,20 @@ public class AttendService {
 
             attended = it.next();
 
-            getDailyWorkTimeMinute = (int) ChronoUnit.MINUTES.between(attended.getGoToWork(), attended.getOffWork());
-            ;
-            wtmDTO.add(new WorkTimeMinuteDTO(attended.getGoToWork().toLocalDate(), getDailyWorkTimeMinute));
+            if(attended.getOffWork()!=null){
 
-            getMonthlyWorkTimeMinute += (int) ChronoUnit.MINUTES.between(attended.getGoToWork(), attended.getOffWork());
+                getDailyWorkTimeMinute = (int) ChronoUnit.MINUTES.between(attended.getGoToWork(), attended.getOffWork());
+                
+                wtmDTO.add(new WorkTimeMinuteDTO(attended.getGoToWork().toLocalDate(), getDailyWorkTimeMinute));
+                
+                getMonthlyWorkTimeMinute += (int) ChronoUnit.MINUTES.between(attended.getGoToWork(), attended.getOffWork());
+            }
             
         }
 
         
 
-        System.out.println("response.size(): "+ wtmDTO.size());
+        System.out.println("ID: "+attended.getEmployeeId()+" response.size(): "+ wtmDTO.size());
         //workTimeByIdAndMonth = AttendResponse의List, getMinuteTime = 일 한 날들 분단위 근무시간
         WorkTimeResponse monthlyWorkTime = new WorkTimeResponse(wtmDTO, getMonthlyWorkTimeMinute);
 

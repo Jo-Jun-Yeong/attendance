@@ -9,10 +9,13 @@ import lombok.Getter;
 public class WorkTimeMinuteDTO {
     LocalDate date;
     int workMinute;
-
+    boolean usingDayOff;
+    
     public WorkTimeMinuteDTO(LocalDate date, int workMinute){
         this.date = date;
         this.workMinute = workMinute;
+        this.usingDayOff = false;
+
     }
 
     public WorkTimeMinuteDTO(){

@@ -64,13 +64,12 @@ public class AttendanceController {
 
     @GetMapping("/workMinute")
     public ResponseEntity<WorkTimeResponse> getWorkTimeMonthlyMinute(@RequestParam Long employee_id, @RequestParam int month) {
-        System.out.println("getWorkTimeMonthlyMinute 시작");
-        // LocalDateTime getmonth = LocalDateTime.of(LocalDate.now().getYear(), month, 1, 0, 0);
-        // System.out.println(getmonth+"***********************************");
+        System.out.println("[Controller] getWorkTimeMonthlyMinute 시작");
+
         WorkTimeRequest workTimeRequest = new WorkTimeRequest(employee_id, month);
 
         WorkTimeResponse workTimeResponse = attendService.getAllWorkTime(workTimeRequest);
-        System.out.println("getWorkTimeMonthlyMinute 끝");
+        System.out.println("[Controller] getWorkTimeMonthlyMinute 끝");
         return ResponseEntity.status(HttpStatus.FOUND).body(workTimeResponse);
     }
     

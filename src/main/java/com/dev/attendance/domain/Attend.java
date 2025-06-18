@@ -23,9 +23,15 @@ public class Attend {
     private LocalDateTime goToWork;
     @Column(nullable = true, name= "off_work")
     private LocalDateTime offWork;
+    
+    @Column(nullable = false, name="usingDayOff")
+    private boolean usingDayOff;
+
 
     public Attend(Long id){
         this.id = id;
+        this.usingDayOff = false;
+
     }
 
     public Attend(){}
