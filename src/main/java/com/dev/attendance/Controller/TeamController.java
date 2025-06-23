@@ -10,7 +10,6 @@ import com.dev.attendance.domain.Team;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+@RequestMapping("/api/team")
 public class TeamController {
     
     private final TeamRepository teamRepository;
@@ -37,7 +38,7 @@ public class TeamController {
         
     }
 
-    @PostMapping("/api/tema/regist")
+    @PostMapping("/regist")
     public ResponseEntity<Team> regisTeam(@RequestBody TeamCreateRequest request) {
 
         Team redgTeam = teamService.redgTeam(request);
@@ -46,7 +47,7 @@ public class TeamController {
     }
     
 
-    @GetMapping("/api/team/getTeam")
+    @GetMapping("/getTeam")
     public ResponseEntity<Team> getTeam(@RequestParam Long id) {
 
         Team team = teamService.findTeam(id);
@@ -55,7 +56,7 @@ public class TeamController {
     }
     
 
-    @GetMapping("/api/team/getAll")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Team>> getAllTeam() {
 
         List<Team> teamList = teamService.getAllTeam();
@@ -63,14 +64,14 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(teamList);
     }
     
-    @PutMapping("api/team/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Team> TeamUpdate(@PathVariable Long id, @RequestBody TeamUpdateRequest request) {
         Team updatedTeam = teamService.updateTeam(id, request);
         
         return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
     }
 
-    @DeleteMapping("/api/team/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id){
         teamRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();

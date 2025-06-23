@@ -38,21 +38,22 @@ public class EmpService {
 
         Emp emp = new Emp(
             request.getName(),
-            request.getTeamName(),
+            request.getTeamName() ,
             request.getRole(),
             request.getBirthday()
         );
         System.out.println("데이터 입력 '시작'.");
-        System.out.printf("%s / %s / %s / %s / ",
-                            request.getName(),
-                            request.getTeamName() !=null ? request.getTeamName() : "없음",
-                            request.getRole(),
-                            request.getBirthday().toString());
+        System.out.printf("%s / %s / %s / %s / \n",
+                            emp.getName(),
+                            emp.getTeamName(),
+                            emp.getRole(),
+                            emp.getBirthday().toString());
 
         Emp redgEmp = empRepository.saveAndFlush(emp);
 
-        if(!request.getTeamName().equals(null)){
-            this.updateTeamCount(redgEmp.getTeamName());
+        if(request.getTeamName()!=null){
+            
+            this.updateTeamCount(request.getTeamName());
         }
         
         System.out.println("데이터 입력 '종료'.");
@@ -95,9 +96,15 @@ public class EmpService {
             ,deletedemp.getBirthday()
             ,deletedemp.getWorkStartDate());
 
+            if(deletedemp.getTeamName()!=null){
+                this.updateTeamCount(teamName);
+            }
+            
+
             empRepository.deleteById(id);  
             System.out.println(id+"번 직원 삭제 완료");
 
+                    //팀 인원수 조정 
 
         } catch (EntityNotFoundException e) {
             System.err.println("오류: 해당 ID의 직원을 찾을 수 없습니다: " + id);
@@ -107,8 +114,7 @@ public class EmpService {
             throw new RuntimeException("직원 삭제중 오류가 발생했습니다.", e);
         }
 
-        //팀 인원수 조정 
-        this.updateTeamCount(teamName);
+
     }
 
     public Emp updateEmp(Long id, EmpUpdateRequest request){
@@ -126,7 +132,7 @@ public class EmpService {
             findEmp.setRole(request.getRole());
         }
 
-        if(!request.getTeamName().isBlank()){
+        if(request.getTeamName()!=null){
             System.out.printf("\s 사원의 직위를 \s -> \s로 변경하였습니다.",findEmp.getName(),findEmp.getTeamName(), request.getTeamName());
             findEmp.setTeamName(request.getTeamName());
 

@@ -17,14 +17,14 @@ public class Attend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false, name="employee_id")
+    @Column(nullable = false)
     private Long employeeId;
-    @Column(nullable = false, name = "go_to_work")
+    @Column(nullable = false)
     private LocalDateTime goToWork;
-    @Column(nullable = true, name= "off_work")
+    @Column(nullable = true)
     private LocalDateTime offWork;
     
-    @Column(nullable = false, name="usingDayOff")
+    @Column(nullable = false)
     private boolean usingDayOff;
 
 

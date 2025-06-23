@@ -32,7 +32,7 @@ public class TeamService {
             request.getManager()
         );
 
-        System.out.printf("팀 이름: %s \n 매니저: %s \n",request.getTeamName(), request.getManager());
+        System.out.printf("팀 이름: %s \n 매니저: %s \n",team.getTeamName(), team.getManager());
         teamRepository.save(team);
         System.out.println("Team 등록을 종료합니다.");
 

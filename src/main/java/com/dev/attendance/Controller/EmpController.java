@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+@RequestMapping("/api/emp")
 public class EmpController {
 
     private final EmpRepository empRepository;
@@ -41,7 +42,7 @@ public class EmpController {
     }
 
     //사원입력
-    @PostMapping("/api/emp/regist")
+    @PostMapping("/regist")
     public ResponseEntity<Emp> registEmp(@RequestBody EmpCreateRequest request) {
         System.out.println("Before");
         Emp redgEmp = empService.redgEmp(request);
@@ -52,7 +53,7 @@ public class EmpController {
     }
     
     //사원 1명 정보 가져오기
-    @GetMapping("/api/emp/getEmp")
+    @GetMapping("/getEmp")
     public ResponseEntity<Emp> getEmp(@RequestParam Long id) {
 
         Emp emp = empService.getEmp(id);
@@ -62,7 +63,7 @@ public class EmpController {
     
 
     //사원 전체 검색
-    @GetMapping("/api/emp/getAll")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Emp>> getAllEmp(){
         
         List<Emp> empList = empService.getAllEmp();
@@ -72,7 +73,7 @@ public class EmpController {
 
     
     //사원 정보 업데이트
-    @PutMapping("api/emp/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Emp> updateEmp(@PathVariable Long id, @RequestBody EmpUpdateRequest request) {
         Emp updatedEmp = empService.updateEmp(id, request);
         
@@ -80,7 +81,7 @@ public class EmpController {
     }
     
     //사원 삭제
-    @DeleteMapping("/api/emp/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteEmp(@PathVariable Long id){
         empService.deleteEmp(id);
 
