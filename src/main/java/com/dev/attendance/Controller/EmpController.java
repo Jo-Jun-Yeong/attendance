@@ -44,9 +44,10 @@ public class EmpController {
     //사원입력
     @PostMapping("/regist")
     public ResponseEntity<Emp> registEmp(@RequestBody EmpCreateRequest request) {
-        System.out.println("Before");
+        System.out.println("Controller -> 사원 생성 시작 ");
         Emp redgEmp = empService.redgEmp(request);
-        System.out.println("After");
+        
+        System.out.println("Controller -> 사원 생성 종료");
 
         return ResponseEntity.status(HttpStatus.OK).body(redgEmp);
         

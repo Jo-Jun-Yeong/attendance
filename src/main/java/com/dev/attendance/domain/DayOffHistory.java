@@ -1,7 +1,7 @@
 package com.dev.attendance.domain;
 
+import java.time.LocalDate;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class DayOff {
+public class DayOffHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -21,14 +21,19 @@ public class DayOff {
     @ManyToOne
     @JoinColumn(nullable = false, name="employee_id")
     private Emp employee;
+    private String reason;
+    private LocalDate useDate = LocalDate.now();
+    private LocalDate applyDate;
 
-    @Column(nullable = false, name="dayoff")
-    //name = "JPA가 생성할 컬럼(FK)명"
-    private int dayOff=11;
-
-    public DayOff(Emp employee){
+    public DayOffHistory(Emp employee, String reason, LocalDate applyDate){
         this.employee = employee;
+        this.reason = reason;
+        this.useDate = LocalDate.now();
+        this.applyDate = applyDate;
     }
 
-    public DayOff(){}
+    
+
+    public DayOffHistory(){}
+    
 }

@@ -73,8 +73,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Team updateTeam(Long id, TeamUpdateRequest request){
-        Team findTeam = teamRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("해당하는팀("+id+")이 없습니다."));
+    public Team updateTeam(TeamUpdateRequest request){
+        Team findTeam = teamRepository.findByTeamName(request.getTeamName()).orElseThrow( () -> new EntityNotFoundException("해당하는팀("+request.getTeamName()+")이 없습니다."));
 
         findTeam.setManager(request.getManager());
 
@@ -91,7 +91,7 @@ public class TeamService {
 
 
         if(!teamName.equals(null)){
-            Team team = teamRepository.findByTeamName(teamName);
+            Team team = teamRepository.findByTeamName(teamName).orElseThrow( () -> new EntityNotFoundException("해당하는팀("+teamName+")이 없습니다."));
         
             team.setMemberCount(teamMemberCount);
             
@@ -99,6 +99,13 @@ public class TeamService {
         }
         System.out.println("updateTeamMemberCount 종료");
 
+    }
+
+    @Transactional
+    public void deleteTeam(String teamName){
+        if(teamRepository.findByTeamName(teamName)!=null){
+            teamRepository.deleteByTeamName(teamName);
+        }
     }
     
 }

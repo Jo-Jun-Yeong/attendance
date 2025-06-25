@@ -28,12 +28,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/api/team")
 public class TeamController {
     
-    private final TeamRepository teamRepository;
+
 
     private final TeamService teamService;
 
-    public TeamController(TeamRepository teamRepository, TeamService teamService){
-        this.teamRepository= teamRepository;
+    public TeamController(TeamService teamService){
+
         this.teamService= teamService;
         
     }
@@ -64,16 +64,16 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(teamList);
     }
     
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Team> TeamUpdate(@PathVariable Long id, @RequestBody TeamUpdateRequest request) {
-        Team updatedTeam = teamService.updateTeam(id, request);
+    @PutMapping("/update/{team}")
+    public ResponseEntity<Team> TeamManagerUpdate(@RequestBody TeamUpdateRequest request) {
+        Team updatedTeam = teamService.updateTeam(request);
         
         return ResponseEntity.status(HttpStatus.OK).body(updatedTeam);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long id){
-        teamRepository.deleteById(id);
+    @DeleteMapping("/delete/{teamName}")
+    public ResponseEntity<Void> deleteTeam(@RequestParam String teamName){
+        teamService.deleteTeam(teamName);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

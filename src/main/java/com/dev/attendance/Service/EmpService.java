@@ -9,14 +9,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.dev.attendance.DTO.EmpDTO;
 import com.dev.attendance.DTO.request.EmpCreateRequest;
 import com.dev.attendance.DTO.request.EmpUpdateRequest;
+import com.dev.attendance.Repository.DayOffRepository;
 import com.dev.attendance.Repository.EmpRepository;
 import com.dev.attendance.Repository.TeamRepository;
+import com.dev.attendance.domain.DayOff;
 import com.dev.attendance.domain.Emp;
 
+import ch.qos.logback.core.util.StringUtil;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -25,11 +29,14 @@ public class EmpService {
 
     private final TeamService teamService;
     private final EmpRepository empRepository;
+    private final DayOffRepository dayOffRepository;
 
     @Autowired
-    public EmpService (EmpRepository empRepository, TeamService teamService){
+    public EmpService (EmpRepository empRepository, TeamService teamService, DayOffRepository dayOffRepository){
         this.empRepository=empRepository;
         this.teamService = teamService;
+        this.dayOffRepository=dayOffRepository;
+
     }
 
     //사원 입력
@@ -51,11 +58,26 @@ public class EmpService {
 
         Emp redgEmp = empRepository.saveAndFlush(emp);
 
-        if(request.getTeamName()!=null){
-            
-            this.updateTeamCount(request.getTeamName());
+        //팀 인원수 조정
+        String teamName = request.getTeamName();
+        if (teamName != null && !teamName.trim().isEmpty()) {
+            this.updateTeamCount(teamName);
         }
         
+        
+        //연차 생성
+        try {
+            
+            System.out.println("EmpService -> 연차 생성 시작");
+            DayOff dayOff = new DayOff(redgEmp);
+            dayOffRepository.save(dayOff);
+            System.out.println("EmpService -> 연차 생성 종료");
+
+        } catch (RuntimeException e) {
+            System.err.println("연차 생성중 오류 발생");
+            System.err.println("오류: "+ e.getMessage());
+        }
+
         System.out.println("데이터 입력 '종료'.");
         return redgEmp;
     }
@@ -96,19 +118,22 @@ public class EmpService {
             ,deletedemp.getBirthday()
             ,deletedemp.getWorkStartDate());
 
-            if(deletedemp.getTeamName()!=null){
-                this.updateTeamCount(teamName);
-            }
-            
+            //팀 인원수 조정 
+            System.out.println("delete -> 팀 인원 수 조정");
+            this.updateTeamCount(teamName);
 
+            //연차 삭제
+            dayOffRepository.deleteByEmployee(deletedemp);
+
+            //Emp삭제
             empRepository.deleteById(id);  
             System.out.println(id+"번 직원 삭제 완료");
-
-                    //팀 인원수 조정 
+            
 
         } catch (EntityNotFoundException e) {
             System.err.println("오류: 해당 ID의 직원을 찾을 수 없습니다: " + id);
-        } catch (Exception e){
+            throw new RuntimeException("삭제 실패", e);
+        } catch (RuntimeException e){
             System.err.println("오류: 직원 삭제 중 알 수 없는 오류 발생. ID: " + id);
             System.err.println("오류: " + e.getMessage());
             throw new RuntimeException("직원 삭제중 오류가 발생했습니다.", e);
@@ -139,6 +164,7 @@ public class EmpService {
             //team이 변경될 때 team인원수 조정
             this.updateTeamCount(beforeTeamName);
             this.updateTeamCount(afterTeamName);
+            System.out.println("update -> 팀 인원수 조정");
             
         }
 
@@ -163,9 +189,13 @@ public class EmpService {
 
     public void updateTeamCount(String teamName){
 
-        System.out.printf("팀 \" \s \"의 인원 조정 시작\n",teamName);
-        int count = teamService.getTeamMemberCount(teamName);
-        teamService.updateTeamMemberCount(teamName, count);
+        //팀 인원수 조정
+        if(StringUtils.hasText(teamName)){
+            System.out.printf("팀 \" %s \"의 인원 조정 시작\n",teamName);
+            int count = teamService.getTeamMemberCount(teamName);
+            teamService.updateTeamMemberCount(teamName, count);
+            System.out.println("팀 인원수 조정");
+        }
         System.out.println("팀 인원수 조정 끝");
     }
 }

@@ -12,7 +12,7 @@ public class DayOffResponse {
     public int dayOffCount;
 
     public DayOffResponse(DayOff dayOff){
-        this.emp = dayOff.getEmployee_id();
+        this.emp = dayOff.getEmployee();
         this.dayOffCount = dayOff.getDayOff();
         
     }
