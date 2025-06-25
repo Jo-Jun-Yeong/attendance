@@ -20,6 +20,7 @@ import com.dev.attendance.DTO.response.WorkTimeResponse;
 import com.dev.attendance.Service.AttendService;
 import com.dev.attendance.domain.Attend;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -48,7 +49,7 @@ public class AttendanceController {
     }
 
     //퇴근
-    @PostMapping("/offTheWork")
+    @PostMapping("/offWork")
     public ResponseEntity<AttendResponse> offTheWork(@RequestBody AttendRequest request) {
         System.out.println("start attendance Controller");
         
@@ -62,15 +63,15 @@ public class AttendanceController {
     }
     
 
-    @GetMapping("/workMinute")
-    public ResponseEntity<WorkTimeResponse> getWorkTimeMonthlyMinute(@RequestParam Long employee_id, @RequestParam int month) {
+    @GetMapping("/workMinute/{employeeId}")
+    public ResponseEntity<WorkTimeResponse> getWorkTimeMonthlyMinute(@PathVariable Long employeeId, @RequestParam int month) {
         System.out.println("[Controller] getWorkTimeMonthlyMinute 시작");
 
-        WorkTimeRequest workTimeRequest = new WorkTimeRequest(employee_id, month);
+        WorkTimeRequest workTimeRequest = new WorkTimeRequest(employeeId, month);
 
         WorkTimeResponse workTimeResponse = attendService.getAllWorkTime(workTimeRequest);
         System.out.println("[Controller] getWorkTimeMonthlyMinute 끝");
-        return ResponseEntity.status(HttpStatus.FOUND).body(workTimeResponse);
+        return ResponseEntity.ok(workTimeResponse);
     }
     
 }

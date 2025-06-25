@@ -12,6 +12,7 @@ import com.dev.attendance.DTO.request.UseDayOffRequest;
 import com.dev.attendance.DTO.response.DayOffCountResponse;
 import com.dev.attendance.DTO.response.DayOffResponse;
 import com.dev.attendance.DTO.response.UseDayOffResponse;
+import com.dev.attendance.Repository.DayOffHistoryRepository;
 import com.dev.attendance.Repository.DayOffRepository;
 import com.dev.attendance.Repository.EmpRepository;
 import com.dev.attendance.domain.DayOff;
@@ -49,7 +50,7 @@ public class DayOffService {
     }
 
     public List<DayOffCountResponse> getAllDayOff(){
-        List<DayOffCountResponse> response = new ArrayList();
+        List<DayOffCountResponse> response = new ArrayList<DayOffCountResponse>();
         Iterator<DayOff> it = dayOffRepository.findAll().iterator();
         DayOff dayOff = null;
         while(it.hasNext()){
@@ -61,8 +62,6 @@ public class DayOffService {
 
     public UseDayOffResponse useDayOff(UseDayOffRequest request){
         
-        
-
         //request: reason, [usedate], id
 
         Emp emp = empRepository.findById(request.getId())
@@ -71,8 +70,11 @@ public class DayOffService {
         DayOff dayOff = dayOffRepository.findByEmployee(emp)
             .orElseThrow(()-> new RuntimeException("해당 id("+request.getId()+")의 사원은 존재하지 않습니다"));
 
+        
         int count = dayOff.getDayOff();
-
+        if(count < 0 || count ==0){
+            throw new IllegalStateException("남은 연차가 없습니다. (현재: " + count + "일)");
+        }
         dayOff.setDayOff(count-1);
 
         System.out.println("        연차 차감시작");

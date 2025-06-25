@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +37,8 @@ public class DayOffController {
         this.empService = empService;
     }
 
-    @GetMapping("/creatDayOff")
-    public ResponseEntity<DayOffResponse> createDayOff(@RequestParam Long id) {
+    @GetMapping("/createDayOff/{id}")
+    public ResponseEntity<DayOffResponse> createDayOff(@PathVariable Long id) {
         System.out.println("Controller > 연차 생성 시작");
         Emp findEmp = empService.getEmp(id);
         DayOff dayOff = dayOffService.createDayOffResponse(findEmp);
@@ -47,7 +48,7 @@ public class DayOffController {
     
 
     @GetMapping("/getDayOffCount/{id}")
-    public ResponseEntity<DayOffCountResponse> getDayOffCount(@RequestParam Long id) {
+    public ResponseEntity<DayOffCountResponse> getDayOffCount(@PathVariable Long id) {
         //emp아이디를 받아서 찾아야 함
         DayOff dayOff = dayOffService.getDayOffCount(id);
 
@@ -72,7 +73,6 @@ public class DayOffController {
 
         if(request.getApplyDate()==null){
             request.setApplyDate(LocalDate.now().plusDays(1));
-            
         }
 
         UseDayOffResponse response = dayOffService.useDayOff(request);
@@ -81,6 +81,14 @@ public class DayOffController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
+
+    //연차 기록 조회
+    @GetMapping("path")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
+    //날짜 월 별 연차 기록 조회
 
     // //연차 등록
     // @PostMapping("path")

@@ -2,14 +2,11 @@ package com.dev.attendance.Controller;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.dev.attendance.DTO.request.EmpCreateRequest;
 import com.dev.attendance.DTO.request.EmpUpdateRequest;
-import com.dev.attendance.Repository.EmpRepository;
 import com.dev.attendance.Service.EmpService;
 import com.dev.attendance.domain.Emp;
 
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -31,14 +27,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/api/emp")
 public class EmpController {
 
-    private final EmpRepository empRepository;
 
     private final EmpService empService;
     
-    public EmpController(EmpService empService, EmpRepository empRepository){
+    public EmpController(EmpService empService){
         this.empService = empService;
-        this.empRepository = empRepository;
-
     }
 
     //사원입력

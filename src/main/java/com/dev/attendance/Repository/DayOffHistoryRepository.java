@@ -1,4 +1,4 @@
-package com.dev.attendance.Service;
+package com.dev.attendance.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

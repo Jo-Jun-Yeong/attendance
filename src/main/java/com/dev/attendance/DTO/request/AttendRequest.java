@@ -10,7 +10,7 @@ public class AttendRequest {
 
     private Long employeeId;
 
-    public AttendRequest(Long employeeId, String type){
+    public AttendRequest(Long employeeId){
         this.employeeId = employeeId;
     }
 

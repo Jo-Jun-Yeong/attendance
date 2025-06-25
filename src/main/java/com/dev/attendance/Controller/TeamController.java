@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.attendance.DTO.request.TeamCreateRequest;
 import com.dev.attendance.DTO.request.TeamUpdateRequest;
-import com.dev.attendance.Repository.TeamRepository;
 import com.dev.attendance.Service.TeamService;
 import com.dev.attendance.domain.Team;
 
@@ -47,8 +46,8 @@ public class TeamController {
     }
     
 
-    @GetMapping("/getTeam")
-    public ResponseEntity<Team> getTeam(@RequestParam Long id) {
+    @GetMapping("/getTeam/{id}")
+    public ResponseEntity<Team> getTeam(@PathVariable Long id) {
 
         Team team = teamService.findTeam(id);
 
@@ -64,7 +63,7 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(teamList);
     }
     
-    @PutMapping("/update/{team}")
+    @PutMapping("/updateTeamManager")
     public ResponseEntity<Team> TeamManagerUpdate(@RequestBody TeamUpdateRequest request) {
         Team updatedTeam = teamService.updateTeam(request);
         
