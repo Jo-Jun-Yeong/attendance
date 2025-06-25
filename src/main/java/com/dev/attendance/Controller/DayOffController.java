@@ -72,6 +72,7 @@ public class DayOffController {
 
         if(request.getApplyDate()==null){
             request.setApplyDate(LocalDate.now().plusDays(1));
+            
         }
 
         UseDayOffResponse response = dayOffService.useDayOff(request);
