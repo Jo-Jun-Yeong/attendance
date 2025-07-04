@@ -3,6 +3,7 @@ package com.dev.attendance.Controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.dev.attendance.DTO.response.UseDayOffResponse;
 import com.dev.attendance.Service.DayOffService;
 import com.dev.attendance.Service.EmpService;
 import com.dev.attendance.domain.DayOff;
+import com.dev.attendance.domain.DayOffHistory;
 import com.dev.attendance.domain.Emp;
 
 
@@ -32,6 +34,7 @@ public class DayOffController {
     private final DayOffService dayOffService;
     private final EmpService empService;
     
+
     DayOffController(DayOffService dayOffService, EmpService empService){
         this.dayOffService = dayOffService;
         this.empService = empService;
@@ -82,13 +85,35 @@ public class DayOffController {
 
     }
 
-    //연차 기록 조회
-    @GetMapping("path")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    //모든 연차 기록 조회
+    @GetMapping("getAllHistory")
+    public ResponseEntity<List<DayOffHistory>> getAllHistory() {
+
+        List<DayOffHistory> response = dayOffService.getAllHistory();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
     //날짜 월 별 연차 기록 조회
+    @GetMapping("getHistoryAllByYearAndMonth")
+    public ResponseEntity<List<DayOffHistory>> getHistoryAllByYearAndMonth(@RequestParam int year, @RequestParam int month) {
+
+        List<DayOffHistory> response = dayOffService.getHistoryAllByYearAndMonth(year, month);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
+    //사원+ 월별 연차 기록 조회
+    @GetMapping("getHistoryEmpByYearAndMonth")
+    public ResponseEntity<List<DayOffHistory>> getHistoryEmpByYearAndMonth(@RequestParam Long id,@RequestParam int year, @RequestParam int month) {
+
+        List<DayOffHistory> response = dayOffService.getHistoryEmpByYearAndMonth(id, year, month);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
 
     // //연차 등록
     // @PostMapping("path")

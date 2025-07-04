@@ -89,7 +89,38 @@ public class DayOffService {
         return new UseDayOffResponse(request.getReason(), request.getApplyDate());
     }
 
-    //연차 갯수 확인 1개 이상이어야 함
+    //연차 추가
+    public void plusDayOff(Long id, int DayOff){
+        
+    }
     
-    
+
+    //모든 연차 기록 조회
+    public List<DayOffHistory> getAllHistory() {
+       
+        return dayOffHistoryRepository.findAll();
+    }
+
+
+    //연, 월 별 모든 연차 기록 조회
+    public List<DayOffHistory> getHistoryAllByYearAndMonth(int year, int month){
+        List<DayOffHistory> response = new ArrayList<DayOffHistory>();        
+
+        response = dayOffHistoryRepository.findAllByYearAndMonth(year, month);
+
+        return response;
+    }
+
+    //직원별 연, 월 별 연차 기록 조회
+    public List<DayOffHistory> getHistoryEmpByYearAndMonth(Long id, int year, int month){
+        List<DayOffHistory> response = new ArrayList<DayOffHistory>();        
+
+        Emp employee = empRepository.findById(id).get();
+            
+
+        response = dayOffHistoryRepository.findByEmployeeAndYearAndMonth(employee, year, month);
+
+        return response;
+    }
+
 }
