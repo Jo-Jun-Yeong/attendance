@@ -32,6 +32,12 @@ public class DayOffHistory {
         this.applyDate = applyDate;
     }
 
+    public DayOffHistory(Emp employee, String reason){
+        this.employee = employee;
+        this.reason = reason;
+        this.useDate = LocalDate.now();
+    }
+
     
 
     public DayOffHistory(){}

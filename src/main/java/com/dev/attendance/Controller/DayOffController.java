@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.dev.attendance.DTO.request.UseDayOffRequest;
 import com.dev.attendance.DTO.response.DayOffCountResponse;
 import com.dev.attendance.DTO.response.DayOffResponse;
+import com.dev.attendance.DTO.response.PlusDayOffResponse;
 import com.dev.attendance.DTO.response.UseDayOffResponse;
 import com.dev.attendance.Service.DayOffService;
 import com.dev.attendance.Service.EmpService;
@@ -28,7 +29,7 @@ import com.dev.attendance.domain.Emp;
 
 
 @Controller
-@RequestMapping("/api/DayOff")
+@RequestMapping("/api/dayOff")
 public class DayOffController {
     
     private final DayOffService dayOffService;
@@ -86,7 +87,7 @@ public class DayOffController {
     }
 
     //모든 연차 기록 조회
-    @GetMapping("getAllHistory")
+    @GetMapping("/getAllHistory")
     public ResponseEntity<List<DayOffHistory>> getAllHistory() {
 
         List<DayOffHistory> response = dayOffService.getAllHistory();
@@ -95,7 +96,7 @@ public class DayOffController {
     }
     
     //날짜 월 별 연차 기록 조회
-    @GetMapping("getHistoryAllByYearAndMonth")
+    @GetMapping("/getHistoryAllByYearAndMonth")
     public ResponseEntity<List<DayOffHistory>> getHistoryAllByYearAndMonth(@RequestParam int year, @RequestParam int month) {
 
         List<DayOffHistory> response = dayOffService.getHistoryAllByYearAndMonth(year, month);
@@ -105,11 +106,23 @@ public class DayOffController {
     
 
     //사원+ 월별 연차 기록 조회
-    @GetMapping("getHistoryEmpByYearAndMonth")
+    @GetMapping("/getHistoryEmpByYearAndMonth")
     public ResponseEntity<List<DayOffHistory>> getHistoryEmpByYearAndMonth(@RequestParam Long id,@RequestParam int year, @RequestParam int month) {
 
         List<DayOffHistory> response = dayOffService.getHistoryEmpByYearAndMonth(id, year, month);
 
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
+
+    //연차 추가
+    @PostMapping("/plusDayOff")
+    public ResponseEntity<PlusDayOffResponse> plusDayOff(@RequestParam Long id,
+        @RequestParam int plusDayOff, @RequestParam String reason) {
+
+        PlusDayOffResponse response = dayOffService.plusDayOff(id, plusDayOff, reason);
+        
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     

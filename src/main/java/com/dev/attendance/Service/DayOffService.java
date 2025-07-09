@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.dev.attendance.DTO.request.UseDayOffRequest;
 import com.dev.attendance.DTO.response.DayOffCountResponse;
 import com.dev.attendance.DTO.response.DayOffResponse;
+import com.dev.attendance.DTO.response.PlusDayOffResponse;
 import com.dev.attendance.DTO.response.UseDayOffResponse;
 import com.dev.attendance.Repository.DayOffHistoryRepository;
 import com.dev.attendance.Repository.DayOffRepository;
@@ -90,8 +91,27 @@ public class DayOffService {
     }
 
     //연차 추가
-    public void plusDayOff(Long id, int DayOff){
+    public PlusDayOffResponse plusDayOff(Long id, int plusDayOff, String reason){
+        Emp emp = empRepository.findById(id).orElseThrow(() -> new RuntimeException("id: "+id+"- 해당 id의 사원은 없습니다."));
+        DayOff dayoff = dayOffRepository.findByEmployee(emp).orElseThrow(()-> new RuntimeException(emp.getId()+"- 사원 불러오기 오류"));
+
+        int dayoffCount = dayoff.getDayOff();
+        //1. dayOff 가져와서 plus만큼 추가해주고 save
+        //2. 기록 테이블에 기록
+        dayoff.setDayOff(dayoffCount+plusDayOff);
+        dayOffRepository.saveAndFlush(dayoff);
+
         
+
+        //연차 추가 한 기록 추가
+        dayOffHistoryRepository.saveAndFlush(new DayOffHistory(emp, reason));
+
+
+
+        PlusDayOffResponse response = new PlusDayOffResponse(emp, plusDayOff, reason);
+
+        return response;
+
     }
     
 
